@@ -164,3 +164,14 @@ export const getUserFollowing = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const deleteUserAccount = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const User = await UserModel.findByIdAndDelete(userId);
+    req.status(200).json(User);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};

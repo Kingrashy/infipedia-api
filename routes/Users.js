@@ -4,6 +4,7 @@ import {
   EditUserCover,
   EditUserProfile,
   addRemoveFriend,
+  deleteUserAccount,
   getAllUsers,
   getSingleUser,
   getUserById,
@@ -22,5 +23,6 @@ router.patch("/:id/edit", EditUser);
 router.patch("/edit/profile", EditUserProfile);
 router.patch("/edit/cover", EditUserCover);
 router.patch("/follow/:followId", addRemoveFriend);
+router.delete("/delete/:userId", deleteUserAccount);
 
 export default router;
