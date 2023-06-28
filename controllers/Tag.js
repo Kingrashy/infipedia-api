@@ -54,7 +54,9 @@ export const unTagPost = async (req, res) => {
 export const getUserTagged = async (req, res) => {
   try {
     const { userId } = req.params;
-    const tagged = await TagModel.find({ userId: userId });
+    const tagged = await TagModel.find({ userId: userId }).sort({
+      createdAt: -1,
+    });
     res.status(200).json(tagged);
   } catch (error) {
     console.log({ error: error.message });
