@@ -27,6 +27,7 @@ export const getUserById = async (req, res) => {
   const { userId } = req.params;
   try {
     const user = await UserModel.findById(userId);
+    delete user.password;
     res.status(200).json(user);
   } catch (error) {
     console.log({ error: error.message });
@@ -144,8 +145,12 @@ export const getUserFollowers = async (req, res) => {
     const { userId } = req.params;
     const User = await UserModel.findById(userId);
     const followers = User?.followers?.filter((id) => id);
-    const user = await UserModel.find({ _id: { $in: followers } });
-    res.status(200).json(user);
+    const users = await UserModel.find({ _id: { $in: followers } });
+    const usersWithoutPasswords = users.map((user) => {
+      user.password = undefined;
+      return user;
+    });
+    res.status(200).json(usersWithoutPasswords);
   } catch (error) {
     console.log({ error: error.message });
     res.status(500).json({ error: error.message });
@@ -157,8 +162,13 @@ export const getUserFollowing = async (req, res) => {
     const { userId } = req.params;
     const User = await UserModel.findById(userId);
     const following = User?.following?.filter((id) => id);
-    const user = await UserModel.find({ _id: { $in: following } });
-    res.status(200).json(user);
+    const users = await UserModel.find({ _id: { $in: following } });
+
+    const usersWithoutPasswords = users.map((user) => {
+      user.password = undefined;
+      return user;
+    });
+    res.status(200).json(usersWithoutPasswords);
   } catch (error) {
     console.log({ error: error.message });
     res.status(500).json({ error: error.message });

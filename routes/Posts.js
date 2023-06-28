@@ -22,7 +22,7 @@ router.patch("/comment/like", likeComments);
 router.patch("/like", likePost);
 router.patch("/delete", deletePost);
 router.get("/like/find", findUserliked);
-router.get("/likes/find", findAllUserLiked);
+router.get("/likes/find/:userId", findAllUserLiked);
 router.get("/following/:userId", getFollowingPost);
 
 export default router;
