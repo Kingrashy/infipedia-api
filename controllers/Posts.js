@@ -133,8 +133,8 @@ export const findAllUserLiked = async (req, res) => {
     const { userId } = req.params;
     const posts = await PostsModel.find();
 
-    const liked = posts?.likes?.filter((id) => id === userId);
-    const likedpost = await PostsModel.find({ userId: { $all: [liked] } });
+    const liked = posts?.likes?.find((id) => id);
+    const likedpost = await PostsModel.find({ userId: { $all: [userId] } });
     res.status(200).json(likedpost);
   } catch (error) {
     console.log({ error: error.message });
