@@ -150,8 +150,9 @@ export const findAllUserLiked = async (req, res) => {
     const { userId } = req.params;
     const posts = await PostsModel.find();
 
-    const liked = posts?.likes?.find((id) => id);
-    const likedpost = await PostsModel.find({ userId: { $all: [userId] } });
+    // const liked = posts?.likes?.find((id) => id);
+    const likedpost = await posts.findMany({ likes: { $all: [userId] } });
+    // const likedpost = await PostsModel.findMany({ likes: { $all: [userId] } });
     res.status(200).json(likedpost);
   } catch (error) {
     console.log({ error: error.message });
@@ -203,6 +204,19 @@ export const getFollowingPost = async (req, res) => {
       userId: { $in: followingId },
     }).sort({ createdAt: -1 });
     res.status(200).json(Post);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getTrendingPost = async (req, res) => {
+  try {
+    const posts = await PostsModel.aggregate([
+      { $sort: { likes: -1 } },
+      { $limit: 10 },
+    ]);
+    res.status(200).json(posts);
   } catch (error) {
     console.log({ error: error.message });
     res.status(500).json({ error: error.message });
