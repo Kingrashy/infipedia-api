@@ -118,7 +118,7 @@ export const likePost = async (req, res) => {
     } else {
       await posts.updateOne({ $push: { likes: userId } });
       const notify = new NotificationModel({
-        userId: userId,
+        userId: posts.userId,
         message: `${likedUser.name} liked your post`,
         isRead: false,
       });
