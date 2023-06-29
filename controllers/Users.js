@@ -1,3 +1,4 @@
+import NotificationModel from "../models/Notification.js";
 import UserModel from "../models/UserModel.js";
 import cloudinary from "../utils/cloudinary.js";
 
@@ -121,6 +122,15 @@ export const addRemoveFriend = async (req, res) => {
         if (!followUser.followers.includes(userId)) {
           await followUser.updateOne({ $push: { followers: userId } });
           await followingUser.updateOne({ $push: { following: followId } });
+          const notify = new NotificationModel({
+            userId: followId,
+            message: `${followingUser.name} followed you`,
+            isRead: false,
+          });
+          const newNotification = notify.save();
+          await followUser.updateOne({
+            $push: { notification: newNotification },
+          });
 
           res.status(200).json("User Followed");
         } else {
