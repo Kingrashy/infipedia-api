@@ -6,6 +6,7 @@ import {
   addRemoveFriend,
   deleteUserAccount,
   getAllUsers,
+  getPopularUser,
   getSingleUser,
   getUserById,
   getUserFollowers,
@@ -19,6 +20,7 @@ router.get("/:username", getSingleUser);
 router.get("/:userId/get", getUserById);
 router.get("/followers/:userId", getUserFollowers);
 router.get("/following/:userId", getUserFollowing);
+router.get("/trending/all", getPopularUser);
 router.patch("/:id/edit", EditUser);
 router.patch("/edit/profile", EditUserProfile);
 router.patch("/edit/cover", EditUserCover);

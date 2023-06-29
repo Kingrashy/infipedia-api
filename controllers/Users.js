@@ -195,3 +195,13 @@ export const deleteUserAccount = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getPopularUser = async (req, res) => {
+  try {
+    const users = await UserModel.find().sort({ followers: -1 }).limit(3);
+    res.status(200).json(users);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
