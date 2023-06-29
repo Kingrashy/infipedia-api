@@ -11,6 +11,7 @@ import CRoutes from "./routes/Community.js";
 import ChatRoute from "./routes/Chat.js";
 import MessageRoute from "./routes/Message.js";
 import TagRoute from "./routes/Tag.js";
+import NotRoute from "./routes/Notification.js";
 
 const app = express();
 dotenv.config();
@@ -34,6 +35,7 @@ app.use("/community", CRoutes);
 app.use("/chat", ChatRoute);
 app.use("/message", MessageRoute);
 app.use("/tag", TagRoute);
+app.use("/notification", NotRoute);
 // const Port = 1000;
 const Port = process.env.PORT || 4001;
 app.listen(Port, () => console.log(`Sever Runing on http://localhost:${Port}`));

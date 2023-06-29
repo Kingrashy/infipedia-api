@@ -1,9 +1,8 @@
 import PostsModel from "../models/PostModel.js";
 import UserModel from "../models/UserModel.js";
-import { postsdata } from "../posts.js";
-import { v4 as uuid } from "uuid";
 import cloudinary from "../utils/cloudinary.js";
 import CommentsModel from "../models/CommentsModel.js";
+import NotificationModel from "../models/Notification.js";
 
 export const getAllPosts = async (req, res) => {
   try {
@@ -62,6 +61,14 @@ export const Comments = async (req, res) => {
   const { postId, userId, text } = req.body;
   const posts = await PostsModel.findById(postId);
   const user = await UserModel.findById(userId);
+  const pId = posts.userId;
+  const postUser = await UserModel.findById(pId);
+  const notify = new NotificationModel({
+    userId: userId,
+    message: `${user.name} liked your post`,
+    isRead: false,
+  });
+  const newNotification = notify.save();
   const tocomments = new CommentsModel({
     userId,
     name: user.name,
@@ -70,6 +77,7 @@ export const Comments = async (req, res) => {
     text,
   });
   const newComment = await tocomments.save();
+  await postUser.updateOne({ $push: { notification: newNotification } });
   await posts.updateOne({ $push: { comments: newComment } }, { new: true });
   res.status(201).json(newComment);
   try {
@@ -101,12 +109,21 @@ export const likePost = async (req, res) => {
   try {
     const { userId, postId } = req.body;
     const posts = await PostsModel.findById(postId);
+    const user = await UserModel.findById(posts.userId);
+    const likedUser = await UserModel.findById(userId);
 
     if (posts.likes.includes(userId)) {
       await posts.updateOne({ $pull: { likes: userId } });
       res.status(200).json("Post unliked");
     } else {
       await posts.updateOne({ $push: { likes: userId } });
+      const notify = new NotificationModel({
+        userId: userId,
+        message: `${likedUser.name} liked your post`,
+        isRead: false,
+      });
+      const newNotification = notify.save();
+      await user.updateOne({ $push: { notification: newNotification } });
 
       res.status(200).json("Post liked");
     }
