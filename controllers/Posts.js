@@ -65,7 +65,7 @@ export const Comments = async (req, res) => {
   const postUser = await UserModel.findById(pId);
   const notify = new NotificationModel({
     userId: userId,
-    message: `${user.name} liked your post`,
+    message: `${user.name} commented on your post`,
     isRead: false,
   });
   const newNotification = notify.save();
