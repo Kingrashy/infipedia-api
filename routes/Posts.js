@@ -7,6 +7,7 @@ import {
   findUserliked,
   getAllPosts,
   getFollowingPost,
+  getStatusPost,
   getTrendingPost,
   getUserPost,
   likeComments,
@@ -26,5 +27,6 @@ router.get("/like/find", findUserliked);
 router.get("/likes/find/:userId", findAllUserLiked);
 router.get("/following/:userId", getFollowingPost);
 router.get("/trend/all", getTrendingPost);
+router.get("/:username/status/:postId", getStatusPost);
 
 export default router;

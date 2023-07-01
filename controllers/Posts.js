@@ -222,3 +222,16 @@ export const getTrendingPost = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getStatusPost = async (req, res) => {
+  const { username, postId } = req.params;
+
+  try {
+    const posts = await PostsModel.findOne({ username: username, _id: postId });
+    if (!posts) return res.status(404).json("Post not found");
+    res.status(200).json(posts);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
