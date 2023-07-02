@@ -137,3 +137,50 @@ export const FetchVideoComments = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const ViewVideo = async (req, res) => {
+  try {
+    const { userId, videoId } = req.body;
+    const video = await VideosModel.findById(videoId);
+    const updated = await video.updateOne({ $push: { views: userId } });
+    res.status(200).json("video view");
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
+export const DownloadVideo = async (req, res) => {
+  try {
+    const { userId, videoId } = req.body;
+    const video = await VideosModel.findById(videoId);
+    const updated = await video.updateOne({ $push: { downloads: userId } });
+    res.status(200).json("video downloaded");
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getVideoViews = async (req, res) => {
+  try {
+    const { videoId } = req.body;
+    const video = await VideosModel.findById(videoId);
+    const views = video.views;
+    res.status(200).json(views);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getVideoLikes = async (req, res) => {
+  try {
+    const { videoId } = req.body;
+    const video = await VideosModel.findById(videoId);
+    const likes = video.likes;
+    res.status(200).json(likes);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};

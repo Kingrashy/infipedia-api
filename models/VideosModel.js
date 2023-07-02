@@ -12,6 +12,7 @@ const VideosSchema = mongoose.Schema(
     likes: { type: Array, default: [] },
     comments: { type: Array, default: [] },
     downloads: { type: Array, default: [] },
+    views: { type: Array, default: [] },
   },
   { timestamps: true }
 );
