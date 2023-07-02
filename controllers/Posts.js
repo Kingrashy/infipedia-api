@@ -168,26 +168,11 @@ export const likePost = async (req, res) => {
   }
 };
 
-export const findUserliked = async (req, res) => {
-  try {
-    const { postId, userId } = req.body;
-    const posts = await PostsModel.findById(postId);
-    const liked = posts.likes.includes(userId);
-    res.status(200).json(liked);
-  } catch (error) {
-    console.log({ error: error.message });
-    res.status(500).json({ error: error.message });
-  }
-};
-
 export const findAllUserLiked = async (req, res) => {
   try {
     const { userId } = req.params;
     const posts = await PostsModel.find();
-
-    // const liked = posts?.likes?.find((id) => id);
     const likedpost = await posts.findMany({ likes: { $all: [userId] } });
-    // const likedpost = await PostsModel.findMany({ likes: { $all: [userId] } });
     res.status(200).json(likedpost);
   } catch (error) {
     console.log({ error: error.message });
@@ -265,6 +250,30 @@ export const getStatusPost = async (req, res) => {
     const posts = await PostsModel.findOne({ username: username, _id: postId });
     if (!posts) return res.status(404).json("Post not found");
     res.status(200).json(posts);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const FetchPostLikes = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const post = await PostsModel.findById(postId);
+    const plikes = post.likes;
+    res.status(200).json(plikes);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const FetchPostComments = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const post = await PostsModel.findById(postId);
+    const pcomments = post.comments;
+    res.status(200).json(pcomments);
   } catch (error) {
     console.log({ error: error.message });
     res.status(500).json({ error: error.message });
