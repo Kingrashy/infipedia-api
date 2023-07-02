@@ -24,7 +24,7 @@ router.patch("/comments", CommentsOnVideo);
 router.patch("/view/one", ViewVideo);
 router.patch("/download/one", DownloadVideo);
 router.get("/comments/all/:videoId", FetchVideoComments);
-router.get("/views/all", getVideoViews);
-router.get("/likes/all", getVideoLikes);
+router.get("/views/all/:videoId", getVideoViews);
+router.get("/likes/all/:videoId", getVideoLikes);
 
 export default router;
