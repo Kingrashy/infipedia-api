@@ -58,32 +58,67 @@ export const CreatePost = async (req, res) => {
 };
 
 export const Comments = async (req, res) => {
-  const { postId, userId, text } = req.body;
-  const posts = await PostsModel.findById(postId);
-  const user = await UserModel.findById(userId);
-  const pId = posts.userId;
-  const postUser = await UserModel.findById(pId);
-  const notify = new NotificationModel({
-    userId: pId,
-    message: `${user.name} commented on your post`,
-    isRead: false,
-  });
-  const newNotification = notify.save();
-  const tocomments = new CommentsModel({
-    userId,
-    name: user.name,
-    username: user.username,
-    userProfile: user.userProfile,
-    text,
-  });
-  const newComment = await tocomments.save();
-  await postUser.updateOne({ $push: { notification: newNotification } });
-  await posts.updateOne({ $push: { comments: newComment } }, { new: true });
-  res.status(201).json(newComment);
-  try {
-  } catch (error) {
-    console.log({ error: error.message });
-    res.status(500).json({ error: error.message });
+  const { postId, userId, text, commentsImg } = req.body;
+
+  if (commentsImg) {
+    const UploadRes = await cloudinary.uploader.upload(commentsImg, {
+      upload_preset: "infipedia_comments",
+    });
+
+    const posts = await PostsModel.findById(postId);
+    const user = await UserModel.findById(userId);
+    const pId = posts.userId;
+    const postUser = await UserModel.findById(pId);
+    const notify = new NotificationModel({
+      userId: pId,
+      message: `${user.name} commented on your post`,
+      isRead: false,
+    });
+    const newNotification = notify.save();
+    const tocomments = new CommentsModel({
+      userId,
+      name: user.name,
+      username: user.username,
+      userProfile: user.userProfile,
+      text,
+      commentsImg: UploadRes,
+    });
+    const newComment = await tocomments.save();
+    await postUser.updateOne({ $push: { notification: newNotification } });
+    await posts.updateOne({ $push: { comments: newComment } }, { new: true });
+    res.status(201).json(newComment);
+    try {
+    } catch (error) {
+      console.log({ error: error.message });
+      res.status(500).json({ error: error.message });
+    }
+  } else if (!commentsImg) {
+    const posts = await PostsModel.findById(postId);
+    const user = await UserModel.findById(userId);
+    const pId = posts.userId;
+    const postUser = await UserModel.findById(pId);
+    const notify = new NotificationModel({
+      userId: pId,
+      message: `${user.name} commented on your post`,
+      isRead: false,
+    });
+    const newNotification = notify.save();
+    const tocomments = new CommentsModel({
+      userId,
+      name: user.name,
+      username: user.username,
+      userProfile: user.userProfile,
+      text,
+    });
+    const newComment = await tocomments.save();
+    await postUser.updateOne({ $push: { notification: newNotification } });
+    await posts.updateOne({ $push: { comments: newComment } }, { new: true });
+    res.status(201).json(newComment);
+    try {
+    } catch (error) {
+      console.log({ error: error.message });
+      res.status(500).json({ error: error.message });
+    }
   }
 };
 

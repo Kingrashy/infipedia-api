@@ -7,6 +7,7 @@ const CommentSchema = mongoose.Schema(
     userProfile: { type: Object, required: true },
     username: { type: String, required: true },
     text: { type: String, required: true },
+    commentsImg: { type: Object },
     likes: [],
     comments: [],
   },
