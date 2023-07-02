@@ -1,3 +1,5 @@
+import CommentsModel from "../models/CommentsModel.js";
+import NotificationModel from "../models/Notification.js";
 import UserModel from "../models/UserModel.js";
 import VideosModel from "../models/VideosModel.js";
 import cloudinary from "../utils/cloudinary.js";
@@ -62,6 +64,74 @@ export const getUserVideos = async (req, res) => {
       createdAt: -1,
     });
     res.status(200).json(video);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const LikeVideo = async (req, res) => {
+  try {
+    const { userId, videoId } = req.body;
+    const video = await VideosModel.findById(videoId);
+    const user = await UserModel.findById(userId);
+    const vuser = await UserModel.findById(video.userId);
+
+    if (video.likes.includes(userId)) {
+      await video.updateOne({ $pull: { likes: userId } });
+      res.status(200).json("Video unliked");
+    } else if (!video.likes.includes(userId)) {
+      await video.updateOne({ $push: { likes: userId } });
+      const notify = new NotificationModel({
+        userId: video.userId,
+        message: `${user.name} liked your video`,
+        isRead: false,
+      });
+      const newNotification = await notify.save();
+      await vuser.updateOne({ $push: { notification: newNotification } });
+      res.status(200).json("video liked");
+    }
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const CommentsOnVideo = async (req, res) => {
+  try {
+    const { userId, videoId, text } = req.body;
+    const video = await VideosModel.findById(videoId);
+    const user = await UserModel.findById(userId);
+    const vuser = await UserModel.findById(video.userId);
+    const notify = new NotificationModel({
+      userId: vuser._id,
+      message: `${user.name} commented on your video`,
+      isRead: false,
+    });
+    const tocomments = new CommentsModel({
+      userId,
+      name: user.name,
+      username: user.username,
+      userProfile: user.userProfile,
+      text,
+    });
+    const newNotification = await notify.save();
+    const newcomment = await tocomments.save();
+    await video.updateOne({ $push: { comments: newcomment } });
+    await vuser.updateOne({ $push: { notification: newNotification } });
+    res.status(201).json(newcomment);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const FetchVideoComments = async (req, res) => {
+  try {
+    const { videoId } = req.params;
+    const video = await VideosModel.findById(videoId);
+    const comments = video.comments;
+    res.status(200).json(comments);
   } catch (error) {
     console.log({ error: error.message });
     res.status(500).json({ error: error.message });
