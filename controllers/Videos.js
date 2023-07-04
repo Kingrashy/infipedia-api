@@ -126,11 +126,24 @@ export const CommentsOnVideo = async (req, res) => {
   }
 };
 
+// export const FetchVideoComments = async (req, res) => {
+//   try {
+//     const { videoId } = req.params;
+//     const video = await VideosModel.findById(videoId).sort({ createdAt: -1 });
+//     const comments = video.comments;
+//     const upc = comments.sort({ createdAt: -1 });
+//     res.status(200).json(upc);
+//   } catch (error) {
+//     console.log({ error: error.message });
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
 export const FetchVideoComments = async (req, res) => {
   try {
     const { videoId } = req.params;
     const video = await VideosModel.findById(videoId);
-    const comments = video.comments;
+    const comments = video.comments.sort((a, b) => b.createdAt - a.createdAt);
     res.status(200).json(comments);
   } catch (error) {
     console.log({ error: error.message });
