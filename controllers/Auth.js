@@ -4,7 +4,7 @@ import genAuthToken from "../utils/genAuthToken.js";
 
 export const RegisterUser = async (req, res) => {
   try {
-    const { name, email, password, username, gender } = req.body;
+    const { name, email, password, username } = req.body;
     const salt = await bcrypt.genSalt();
     const hashedPass = await bcrypt.hash(password, salt);
     const User = await UserModel.findOne({ email: email });
@@ -16,7 +16,6 @@ export const RegisterUser = async (req, res) => {
       name: name,
       email: email,
       username: username,
-      gender: gender,
 
       password: hashedPass,
     });
