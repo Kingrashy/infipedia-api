@@ -126,19 +126,6 @@ export const CommentsOnVideo = async (req, res) => {
   }
 };
 
-// export const FetchVideoComments = async (req, res) => {
-//   try {
-//     const { videoId } = req.params;
-//     const video = await VideosModel.findById(videoId).sort({ createdAt: -1 });
-//     const comments = video.comments;
-//     const upc = comments.sort({ createdAt: -1 });
-//     res.status(200).json(upc);
-//   } catch (error) {
-//     console.log({ error: error.message });
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
 export const FetchVideoComments = async (req, res) => {
   try {
     const { videoId } = req.params;
@@ -192,6 +179,23 @@ export const getVideoLikes = async (req, res) => {
     const video = await VideosModel.findById(videoId);
     const likes = video.likes;
     res.status(200).json(likes);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getUsersWhoLiked = async (req, res) => {
+  try {
+    const { videoId } = req.params;
+    const video = await VideosModel.findById(videoId);
+    const likes = video.likes;
+
+    const wholiked = await UserModel.find({ _id: { $in: likes } }).select(
+      "-password -notification"
+    );
+
+    res.status(200).json(wholiked);
   } catch (error) {
     console.log({ error: error.message });
     res.status(500).json({ error: error.message });

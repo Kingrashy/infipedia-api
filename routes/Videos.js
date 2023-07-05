@@ -9,6 +9,7 @@ import {
   ViewVideo,
   getSingleVideo,
   getUserVideos,
+  getUsersWhoLiked,
   getVideoLikes,
   getVideoViews,
 } from "../controllers/Videos.js";
@@ -26,5 +27,6 @@ router.patch("/download/one", DownloadVideo);
 router.get("/comments/all/:videoId", FetchVideoComments);
 router.get("/views/all/:videoId", getVideoViews);
 router.get("/likes/all/:videoId", getVideoLikes);
+router.get("/like/user/liked/:videoId", getUsersWhoLiked);
 
 export default router;
