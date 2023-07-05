@@ -5,7 +5,7 @@ const VideosSchema = mongoose.Schema(
     userId: { type: String, required: true },
     username: { type: String, required: true },
     name: { type: String, required: true },
-    userProfile: { type: Object, required: true },
+    userProfile: { type: Object },
     video: { type: Object, required: true },
     verified: { type: Boolean },
     desc: { type: String, required: true },
