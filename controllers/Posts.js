@@ -233,6 +233,7 @@ export const getFollowingPost = async (req, res) => {
 export const getTrendingPost = async (req, res) => {
   try {
     const posts = await PostsModel.aggregate([
+      { $match: { likes: { $gte: 5 } } }, // Filter posts with at least 5 likes
       { $sort: { likes: -1 } },
       { $limit: 10 },
     ]);
