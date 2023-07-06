@@ -8,6 +8,7 @@ import {
   PostVideo,
   ViewVideo,
   getSingleVideo,
+  getTrendingVideos,
   getUserVideos,
   getUsersWhoLiked,
   getVideoLikes,
@@ -28,5 +29,6 @@ router.get("/comments/all/:videoId", FetchVideoComments);
 router.get("/views/all/:videoId", getVideoViews);
 router.get("/likes/all/:videoId", getVideoLikes);
 router.get("/like/user/liked/:videoId", getUsersWhoLiked);
+router.get("/trend/all", getTrendingVideos);
 
 export default router;

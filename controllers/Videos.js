@@ -201,3 +201,24 @@ export const getUsersWhoLiked = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getTrendingVideos = async (req, res) => {
+  try {
+    const videos = await VideosModel.aggregate([
+      {
+        $match: {
+          $expr: {
+            $gt: [{ $size: "$likes" }, 1], // Filter posts with at least 5 likes
+          },
+        },
+      },
+      { $addFields: { totalLikes: { $size: "$likes" } } }, // Add a field to store the total number of likes
+      { $sort: { totalLikes: -1 } }, // Sort by totalLikes in descending order
+      { $limit: 10 },
+    ]);
+    res.status(200).json(videos);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
