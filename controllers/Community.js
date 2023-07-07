@@ -30,8 +30,9 @@ export const createCommunity = async (req, res) => {
       ccover: ccover,
       owner: user,
     });
+    const newcommunity = await NewCommunity.save();
 
-    res.status(201).json(NewCommunity);
+    res.status(201).json(newcommunity);
   } catch (error) {
     console.log({ error: error.message });
     res.status(500).json({ error: error.message });
