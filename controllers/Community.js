@@ -3,12 +3,10 @@ import UserModel from "../models/UserModel.js";
 import { communitydata } from "../community.js";
 import CommunityModel from "../models/CommunityModel.js";
 
-const community = [];
-
 export const getAllCommunity = async (req, res) => {
   try {
-    const fcommunity = communitydata;
-    res.status(200).json(fcommunity);
+    const community = await CommunityModel.find();
+    res.status(200).json(community);
   } catch (error) {
     console.log({ error: error.message });
     res.status(500).json({ error: error.message });
@@ -18,6 +16,7 @@ export const getAllCommunity = async (req, res) => {
 export const createCommunity = async (req, res) => {
   try {
     const { userId, cname, cprofile, ccover, cdesc } = req.body;
+    const slug = cname.replace(" ", "-").toLowerCase();
     const user = await UserModel.findById(userId).select(
       "-password -notification"
     );
@@ -29,6 +28,7 @@ export const createCommunity = async (req, res) => {
       cprofile: cprofile,
       ccover: ccover,
       owner: user,
+      slug: slug,
     });
     const newcommunity = await NewCommunity.save();
 

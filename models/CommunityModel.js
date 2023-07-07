@@ -6,6 +6,7 @@ const CommunitySchema = mongoose.Schema(
     owner: { type: Array },
     cname: { type: String, required: true },
     cdesc: { type: String, required: true },
+    slug: { type: String, required: true },
     cprofile: { type: Object, required: true },
     ccover: { type: Object },
     members: { type: Array, default: [] },
