@@ -10,7 +10,7 @@ const CommunitySchema = mongoose.Schema(
     members: { type: Array, default: [] },
     verified: { type: Boolean, default: false },
     post: { type: Array },
-    annoucement: { type: Arry },
+    annoucement: { type: Array },
   },
   { timestamps: true }
 );
