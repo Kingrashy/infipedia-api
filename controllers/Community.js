@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid";
 import UserModel from "../models/UserModel.js";
 import { communitydata } from "../community.js";
+import CommunityModel from "../models/CommunityModel.js";
 
 const community = [];
 
@@ -16,29 +17,19 @@ export const getAllCommunity = async (req, res) => {
 
 export const createCommunity = async (req, res) => {
   try {
-    const {
-      userId,
-      uUsername,
-      uname,
-      uProfile,
-      cname,
-      cProfile,
-      cCover,
-      cCat,
-    } = req.body;
+    const { userId, cname, cProfile, ccover } = req.body;
+    const user = await UserModel.findById(userId).select(
+      "-password -notification"
+    );
 
-    const NewCommunity = {
+    const NewCommunity = new CommunityModel({
+      userId,
       cname: cname,
       cProfile: cProfile,
-      cCover: cCover,
-      cCat: cCat,
-      cid: uuid(),
-      userId: userId,
-      uname: uname,
-      uProfile: uProfile,
-      uUsername: uUsername,
-    };
-    communitydata.push(NewCommunity);
+      ccover: ccover,
+      owner: user,
+    });
+
     res.status(201).json(NewCommunity);
   } catch (error) {
     console.log({ error: error.message });
