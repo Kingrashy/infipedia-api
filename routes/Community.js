@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  addRules,
   createCommunity,
   getAllCommunity,
   getSingleCommunity,
@@ -9,8 +8,7 @@ import {
 const router = express.Router();
 
 router.get("/", getAllCommunity);
-router.get("/:id", getSingleCommunity);
+router.get("/one/:slug", getSingleCommunity);
 router.post("/new", createCommunity);
-router.patch("/:communityId/rules", addRules);
 
 export default router;
