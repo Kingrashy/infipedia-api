@@ -17,7 +17,7 @@ export const getAllCommunity = async (req, res) => {
 
 export const createCommunity = async (req, res) => {
   try {
-    const { userId, cname, cProfile, ccover } = req.body;
+    const { userId, cname, cProfile, ccover, cdesc } = req.body;
     const user = await UserModel.findById(userId).select(
       "-password -notification"
     );
@@ -25,6 +25,7 @@ export const createCommunity = async (req, res) => {
     const NewCommunity = new CommunityModel({
       userId,
       cname: cname,
+      cdesc: cdesc,
       cProfile: cProfile,
       ccover: ccover,
       owner: user,
