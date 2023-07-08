@@ -31,7 +31,9 @@ export const getUserUnread = async (req, res) => {
   try {
     const { username } = req.params;
     const User = await UserModel.findOne({ username: username });
-    const notifications = User.notification;
+    const notifications = User.notification.filter(
+      (not) => not.isRead === false
+    );
     res.status(200).json(notifications);
   } catch (error) {
     console.log({ error: error.message });
