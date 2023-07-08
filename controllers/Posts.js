@@ -85,7 +85,7 @@ export const Comments = async (req, res) => {
     });
     const newComment = await tocomments.save();
     await postUser.updateOne(
-      { $push: { notification: newNotification } },
+      { $push: { notification: notify } },
       { new: true }
     );
     await posts.updateOne({ $push: { comments: newComment } }, { new: true });
@@ -115,7 +115,7 @@ export const Comments = async (req, res) => {
     });
     const newComment = await tocomments.save();
     await postUser.updateOne(
-      { $push: { notification: newNotification } },
+      { $push: { notification: notify } },
       { new: true }
     );
     await posts.updateOne({ $push: { comments: newComment } }, { new: true });
@@ -164,10 +164,7 @@ export const likePost = async (req, res) => {
         isRead: false,
       });
       const newNotification = notify.save();
-      await user.updateOne(
-        { $push: { notification: newNotification } },
-        { new: true }
-      );
+      await user.updateOne({ $push: { notification: notify } }, { new: true });
 
       res.status(200).json("Post liked");
     }
