@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const CommunitySchema = mongoose.Schema(
   {
     userId: { type: String, required: true },
-    owner: { type: Array },
+    owner: { type: Object },
     cname: { type: String, required: true },
     cdesc: { type: String, required: true },
     slug: { type: String, required: true },
