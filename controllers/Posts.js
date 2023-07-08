@@ -84,7 +84,10 @@ export const Comments = async (req, res) => {
       commentsImg: UploadRes,
     });
     const newComment = await tocomments.save();
-    await postUser.updateOne({ $push: { notification: newNotification } });
+    await postUser.updateOne(
+      { $push: { notification: newNotification } },
+      { new: true }
+    );
     await posts.updateOne({ $push: { comments: newComment } }, { new: true });
     res.status(201).json(newComment);
     try {
@@ -111,7 +114,10 @@ export const Comments = async (req, res) => {
       text,
     });
     const newComment = await tocomments.save();
-    await postUser.updateOne({ $push: { notification: newNotification } });
+    await postUser.updateOne(
+      { $push: { notification: newNotification } },
+      { new: true }
+    );
     await posts.updateOne({ $push: { comments: newComment } }, { new: true });
     res.status(201).json(newComment);
     try {
@@ -158,7 +164,10 @@ export const likePost = async (req, res) => {
         isRead: false,
       });
       const newNotification = notify.save();
-      await user.updateOne({ $push: { notification: newNotification } });
+      await user.updateOne(
+        { $push: { notification: newNotification } },
+        { new: true }
+      );
 
       res.status(200).json("Post liked");
     }

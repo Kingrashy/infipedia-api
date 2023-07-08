@@ -88,7 +88,10 @@ export const LikeVideo = async (req, res) => {
         isRead: false,
       });
       const newNotification = await notify.save();
-      await vuser.updateOne({ $push: { notification: newNotification } });
+      await vuser.updateOne(
+        { $push: { notification: newNotification } },
+        { new: true }
+      );
       res.status(200).json("video liked");
     }
   } catch (error) {

@@ -1,4 +1,5 @@
 import NotificationModel from "../models/Notification.js";
+import UserModel from "../models/UserModel.js";
 
 export const getUserNotification = async (req, res) => {
   const { userId } = req.params;
@@ -20,6 +21,18 @@ export const ReadNotification = async (req, res) => {
       { $set: { isRead: true } }
     );
     res.status(200).json(updated);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getUserUnread = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const User = await UserModel.findOne({ username: username });
+    const notifications = User.notification;
+    res.status(200).json(notifications);
   } catch (error) {
     console.log({ error: error.message });
     res.status(500).json({ error: error.message });
