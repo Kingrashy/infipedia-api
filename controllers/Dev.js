@@ -46,7 +46,7 @@ export const DisableUserAccount = async (req, res) => {
 
 export const DeleteUserAccount = async (req, res) => {
   try {
-    const { userId } = re.params;
+    const { userId } = req.params;
     const user = await UserModel.findByIdAndDelete(userId);
     res.status(200).json(user);
   } catch (error) {
