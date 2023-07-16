@@ -7,6 +7,7 @@ import {
   deleteUserAccount,
   getAllUsers,
   getPopularUser,
+  getSearchedUsers,
   getSingleUser,
   getUserById,
   getUserFollowers,
@@ -26,5 +27,6 @@ router.patch("/edit/profile", EditUserProfile);
 router.patch("/edit/cover", EditUserCover);
 router.patch("/follow/:followId", addRemoveFriend);
 router.delete("/delete/:userId", deleteUserAccount);
+router.get("/all/:searchTerm", getSearchedUsers);
 
 export default router;

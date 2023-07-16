@@ -49,3 +49,22 @@ export const getSingleCommunity = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const JoinCommunity = async (req, res) => {
+  try {
+    const { communityId, userId } = req.params
+    const community = await CommunityModel.findById(communityId)
+    const user = await UserModel.findById(userId)
+    const join = {
+      name: user.name,
+      username: user.username,
+      userProfile: user.userProfile,
+      isApproved: false
+    }
+    await community.updatedOne({$push : { members: join }})
+    res.status(200).json(join)
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+}

@@ -205,3 +205,16 @@ export const getPopularUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getSearchedUsers = async (req, res) => {
+  try {
+    const searchTerm = req.params.searchTerm;
+    const users = await UserModel.find({
+      name: { $regex: searchTerm, $options: "i" },
+    }).select("-password -notification");
+    res.status(200).json(users);
+  } catch (error) {
+    console.log({ error: error.message });
+    return res.status(500).json({ error: error.message });
+  }
+};
