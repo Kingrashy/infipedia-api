@@ -13,6 +13,7 @@ const UserSchema = mongoose.Schema(
     location: String,
     bio: String,
     verified: { type: Boolean, default: false },
+    disabled: { type: Boolean, default: false },
     notification: { type: Array },
   },
   { timestamps: true }

@@ -12,6 +12,7 @@ import ChatRoute from "./routes/Chat.js";
 import MessageRoute from "./routes/Message.js";
 import TagRoute from "./routes/Tag.js";
 import NotRoute from "./routes/Notification.js";
+import DevRoute from "./routes/Dev.js";
 
 const app = express();
 dotenv.config();
@@ -36,7 +37,8 @@ app.use("/chat", ChatRoute);
 app.use("/message", MessageRoute);
 app.use("/tag", TagRoute);
 app.use("/notification", NotRoute);
-// const Port = 1000;
+app.use("/dev", DevRoute);
+
 const Port = process.env.PORT || 4001;
 app.listen(Port, () => console.log(`Sever Runing on http://localhost:${Port}`));
 
